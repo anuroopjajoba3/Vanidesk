@@ -1,0 +1,17 @@
+# Secrets and local settings
+.env
+
+# The virtual environment
+.venv/
+
+# The SQLite database (seed.py creates it again)
+*.db
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Editor and system files
+.DS_Store
+.vscode/
+.idea/
