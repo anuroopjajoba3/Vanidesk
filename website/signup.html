@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+
+<!-- One narrow white card in the middle of the page -->
+<section class="mx-auto max-w-md px-4 pt-12 pb-16 sm:px-6 sm:pt-16">
+  <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
+    <h1 class="text-2xl font-semibold tracking-tight">Sign up</h1>
+    <p class="mt-1 text-sm text-slate-600">Create an account for your business.</p>
+
+    <!-- This screen is the look only. Accounts are not built yet, and the page says so. -->
+    <div class="mt-4 rounded-lg border border-orange-200 bg-orange-50 p-4 text-sm text-orange-800">
+      <p class="font-medium">Accounts are not switched on yet.</p>
+      <p class="mt-1">
+        This screen is a preview, so the button does nothing. To hear from us, please
+        <a href="/contact" class="font-medium underline">book a demo</a> instead.
+      </p>
+    </div>
+
+    <!-- The button is disabled, so this form is never sent -->
+    <form method="post" class="mt-6 space-y-4">
+      <div>
+        <label for="email" class="block text-sm font-medium">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email"
+               class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium">Password</label>
+        <!-- type="password" shows dots instead of the letters that are typed -->
+        <input id="password" name="password" type="password" autocomplete="new-password"
+               class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
+        <p class="mt-1 text-xs text-slate-500">At least 8 characters.</p>
+      </div>
+
+      <div>
+        <label for="password_again" class="block text-sm font-medium">Password, once more</label>
+        <input id="password_again" name="password_again" type="password" autocomplete="new-password"
+               class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
+      </div>
+
+      <button type="submit" disabled title="Switched off until accounts are built" class="w-full cursor-not-allowed rounded-full border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-medium text-slate-400">Create account</button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-slate-600">
+      Already have an account? <a href="/login" class="text-indigo-600 hover:underline">Log in</a>
+    </p>
+  </div>
+</section>
+
+{% endblock %}

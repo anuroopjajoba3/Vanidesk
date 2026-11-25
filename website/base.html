@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <!--
+    The shared layout. Every page of the website has "extends base.html" as
+    its first line and fills in two blocks: "title" (the text on the browser
+    tab) and "content" (everything between the header and the footer).
+    So the header, the navigation and the footer are written once, here.
+  -->
+  <head>
+    <meta charset="UTF-8" />
+    <!-- This line makes the page fit the width of a phone screen -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- app_name comes from app/config.py, the one place the name is written -->
+    <title>{% block title %}{% endblock %} · {{ app_name }}</title>
+    <!-- The small icon on the browser tab: a blue square, drawn right here so no image file is needed -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23615fff'/%3E%3C/svg%3E" />
+    <!-- Tailwind, downloaded from the internet each time the page loads (same as the dashboard) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <!-- The same soft blue background as the dashboard. flex-col + min-h-screen keep the footer at the bottom. -->
+  <body class="flex min-h-screen flex-col bg-linear-to-b from-blue-50 via-blue-200 to-blue-50 text-slate-800">
+
+    <!-- The links in the navigation, written once and used twice below:
+         in the wide-screen menu and in the phone menu. Each one is (address, text). -->
+    {% set nav_links = [
+      ("/how-it-works", "How it works"),
+      ("/pricing", "Pricing"),
+      ("/about", "About"),
+      ("/contact", "Contact"),
+    ] %}
+
+    <!-- ============ Header ============ -->
+    <header class="border-b border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+
+        <!-- The logo and the name. Clicking it goes to the home page. -->
+        <a href="/" class="flex items-center gap-2">
+          <span class="size-7 shrink-0 rounded-lg bg-indigo-500"></span>
+          <span class="text-lg font-semibold">{{ app_name }}</span>
+        </a>
+
+        <!-- The menu on wide screens. "hidden md:flex" means: hidden on a phone, shown from medium width up. -->
+        <nav class="hidden items-center gap-6 text-sm md:flex" aria-label="Main">
+          {% for address, text in nav_links %}
+          <!-- request.url.path is the address of the page being shown, so its link is drawn darker -->
+          <a href="{{ address }}" class="{% if request.url.path == address %}font-medium text-indigo-600{% else %}text-slate-600 hover:text-slate-900{% endif %}">{{ text }}</a>
+          {% endfor %}
+        </nav>
+
+        <div class="hidden items-center gap-4 md:flex">
+          <a href="/login" class="text-sm {% if request.url.path == '/login' %}font-medium text-indigo-600{% else %}text-slate-600 hover:text-slate-900{% endif %}">Log in</a>
+          <a href="/contact" class="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">Book a demo</a>
+        </div>
+
+        <!-- The menu button on phones. The script at the bottom of this file makes it work. -->
+        <button id="menu-button" type="button" aria-controls="phone-menu" aria-expanded="false" class="cursor-pointer rounded-lg border border-slate-200 p-2 text-slate-600 md:hidden">
+          <span class="sr-only">Open or close the menu</span>
+          <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- The menu on phones: the same links, one under the other. It starts hidden. -->
+      <nav id="phone-menu" class="hidden border-t border-slate-200 px-4 py-3 md:hidden" aria-label="Main, phone">
+        {% for address, text in nav_links %}
+        <a href="{{ address }}" class="block rounded-lg px-3 py-2 text-sm {% if request.url.path == address %}bg-indigo-50 font-medium text-indigo-600{% else %}text-slate-700 hover:bg-slate-50{% endif %}">{{ text }}</a>
+        {% endfor %}
+        <a href="/login" class="block rounded-lg px-3 py-2 text-sm {% if request.url.path == '/login' %}bg-indigo-50 font-medium text-indigo-600{% else %}text-slate-700 hover:bg-slate-50{% endif %}">Log in</a>
+        <a href="/contact" class="mt-2 block rounded-full bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-indigo-700">Book a demo</a>
+      </nav>
+    </header>
+
+    <!-- ============ The page itself ============ -->
+    <!-- flex-1 lets this part grow, which pushes the footer to the bottom on short pages -->
+    <main class="flex-1">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- ============ Footer ============ -->
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto grid max-w-5xl gap-8 px-4 py-10 text-sm sm:grid-cols-3 sm:px-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="size-6 shrink-0 rounded-lg bg-indigo-500"></span>
+            <span class="font-semibold">{{ app_name }}</span>
+          </div>
+          <p class="mt-3 text-slate-500">An AI phone receptionist for US small businesses, in six languages.</p>
+        </div>
+
+        <div>
+          <h2 class="font-medium">Product</h2>
+          <ul class="mt-3 space-y-2 text-slate-600">
+            {% for address, text in nav_links %}
+            <li><a href="{{ address }}" class="hover:text-slate-900">{{ text }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="font-medium">Account</h2>
+          <ul class="mt-3 space-y-2 text-slate-600">
+            <li><a href="/login" class="hover:text-slate-900">Log in</a></li>
+            <li><a href="/signup" class="hover:text-slate-900">Sign up</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- An honest status line on every page: the product cannot take real calls yet -->
+      <p class="border-t border-slate-100 px-4 py-4 text-center text-xs text-slate-500">
+        {{ app_name }} is still being built. It does not answer real phone calls yet.
+      </p>
+    </footer>
+
+    <!-- Open and close the phone menu when the menu button is clicked -->
+    <script>
+      const menuButton = document.getElementById("menu-button");
+      const phoneMenu = document.getElementById("phone-menu");
+
+      menuButton.addEventListener("click", () => {
+        // toggle() removes the class when it is there and adds it when it is not.
+        // It answers true when the class was added, which means the menu is now hidden.
+        const isHidden = phoneMenu.classList.toggle("hidden");
+        // Tell screen readers whether the menu is open.
+        menuButton.setAttribute("aria-expanded", isHidden ? "false" : "true");
+      });
+    </script>
+  </body>
+</html>

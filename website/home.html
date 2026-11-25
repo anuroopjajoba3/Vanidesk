@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}A phone receptionist that speaks your caller's language{% endblock %}
+
+{% block content %}
+
+<!-- Section 1: the hero. The big headline, one paragraph, and the two main buttons. -->
+<section class="mx-auto max-w-5xl px-4 pt-12 pb-10 text-center sm:px-6 sm:pt-20">
+  <!-- An honest badge: the product cannot take real calls yet -->
+  <p class="inline-block rounded-full border border-indigo-200 bg-white px-3 py-1 text-xs font-medium text-indigo-600">
+    In development · not taking real calls yet
+  </p>
+
+  <!-- text-3xl on a phone, sm:text-5xl from small screens up -->
+  <h1 class="mx-auto mt-5 max-w-3xl text-3xl font-semibold tracking-tight sm:text-5xl sm:leading-tight">
+    A phone receptionist that answers in your caller's language
+  </h1>
+
+  <p class="mx-auto mt-5 max-w-2xl text-base text-slate-600 sm:text-lg">
+    {{ app_name }} is an AI receptionist for US small businesses. It is being built to pick up the
+    phone day and night, speak English, Hinglish, Hindi, Telugu, Tamil and Spanish, book
+    appointments, and text the caller a confirmation.
+  </p>
+
+  <!-- The call to action. On a phone the buttons sit one under the other. -->
+  <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+    <a href="/contact" class="w-full rounded-full bg-indigo-600 px-6 py-3 text-sm font-medium text-white hover:bg-indigo-700 sm:w-auto">Book a demo</a>
+    <a href="/how-it-works" class="w-full rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 sm:w-auto">See how it works</a>
+  </div>
+</section>
+
+<!-- Section 2: a picture of the product, drawn with HTML in the style of the dashboard.
+     The call in it is made up, and the page says so. -->
+<section class="mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+  <div class="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+    <header class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 px-5 py-3">
+      <h2 class="text-sm font-medium">Call from +1 (555) 010-0142</h2>
+      <span class="font-mono text-xs uppercase tracking-widest text-indigo-500">Example call</span>
+    </header>
+
+    <div class="px-5 py-5 sm:px-8">
+      <!-- The checklist of what the receptionist did on the call -->
+      <ul class="space-y-3 text-sm">
+        {% for step in [
+          "Greeted the caller in Telugu",
+          "Booked a teeth cleaning for Tuesday 2:00 PM",
+          "Cancelled the old Friday appointment",
+          "Sent an SMS confirmation",
+        ] %}
+        <li class="flex items-center gap-3">
+          <svg class="size-5 shrink-0 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <span>{{ step }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <p class="mt-6 text-sm font-medium">Done. 1 booked, 1 cancelled:</p>
+
+      <table class="mt-3 w-full text-left text-sm">
+        <thead>
+          <tr class="border-b border-slate-200">
+            <th class="py-2 pr-3 font-medium">Status</th>
+            <th class="py-2 pr-3 font-medium">When</th>
+            <th class="py-2 font-medium">Service</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-slate-100">
+            <td class="py-2 pr-3 text-green-700">Confirmed</td>
+            <td class="py-2 pr-3">Tue, 2:00 PM</td>
+            <td class="py-2">Teeth cleaning</td>
+          </tr>
+          <tr class="border-b border-slate-100">
+            <td class="py-2 pr-3 text-red-600">Cancelled</td>
+            <td class="py-2 pr-3">Fri, 4:00 PM</td>
+            <td class="py-2">Whitening consult</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">Telugu</span>
+        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">2m 14s</span>
+      </div>
+    </div>
+
+    <footer class="border-t border-slate-200 px-5 py-3 text-xs text-slate-500 sm:px-8">
+      This is an example with made-up data. It shows what the business owner sees after a call.
+    </footer>
+  </div>
+</section>
+
+<!-- Section 3: what the product is meant to do, as six cards.
+     One column on a phone, two on a small screen, three on a wide one. -->
+<section class="mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+  <h2 class="text-center text-2xl font-semibold tracking-tight">What it is being built to do</h2>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <svg class="size-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      <h3 class="mt-3 font-medium">Answer every call, day and night</h3>
+      <p class="mt-1 text-sm text-slate-600">The receptionist picks up as soon as the phone rings. No hold music, no voicemail, also after closing time.</p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <svg class="size-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+      </svg>
+      <h3 class="mt-3 font-medium">Speak six languages</h3>
+      <p class="mt-1 text-sm text-slate-600">The caller talks the way they talk at home, and the receptionist answers in the same language.</p>
+      <div class="mt-3 flex flex-wrap gap-2">
+        {% for language in ["English", "Hinglish", "Hindi", "Telugu", "Tamil", "Spanish"] %}
+        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">{{ language }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <svg class="size-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+      </svg>
+      <h3 class="mt-3 font-medium">Book appointments</h3>
+      <p class="mt-1 text-sm text-slate-600">It looks for a free slot in your calendar, then books, moves or cancels the appointment during the call.</p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <svg class="size-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      <h3 class="mt-3 font-medium">Text a confirmation</h3>
+      <p class="mt-1 text-sm text-slate-600">After the call, the caller gets an SMS with the date and time, so nobody has to write it down.</p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <svg class="size-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+      </svg>
+      <h3 class="mt-3 font-medium">Show you every call</h3>
+      <p class="mt-1 text-sm text-slate-600">The owner dashboard lists each call with a short summary, the appointments that came out of it, and the full transcript.</p>
+    </div>
+
+    <!-- The sixth card is a link to the How it works page -->
+    <a href="/how-it-works" class="flex flex-col justify-center rounded-2xl border border-indigo-200 bg-indigo-50 p-5 hover:bg-indigo-100">
+      <h3 class="font-medium text-indigo-700">See one call, step by step</h3>
+      <p class="mt-1 text-sm text-indigo-700">From the first ring to the text message, and which steps are built so far.</p>
+      <span class="mt-3 text-sm font-medium text-indigo-700">How it works →</span>
+    </a>
+  </div>
+</section>
+
+<!-- Section 4: what exists today and what does not. Keep this list true:
+     move a line from the right card to the left card only when that part really works. -->
+<section class="mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+  <h2 class="text-center text-2xl font-semibold tracking-tight">Where the product is today</h2>
+  <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-slate-600">
+    {{ app_name }} is not finished. Here is exactly what works now and what is still to come.
+  </p>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2">
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 class="inline-block rounded-md border border-green-200 bg-green-50 px-2 py-1 font-mono text-xs text-green-700">Built</h3>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-700">
+        <li>The owner dashboard: calls, appointments, transcripts and business settings, shown with sample calls</li>
+        <li>This website and the demo request form</li>
+      </ul>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 class="inline-block rounded-md border border-orange-200 bg-orange-50 px-2 py-1 font-mono text-xs text-orange-700">Not built yet</h3>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-700">
+        <li>Answering real phone calls</li>
+        <li>Booking into a real calendar</li>
+        <li>Sending real text messages</li>
+        <li>Accounts: the log in and sign up screens are a preview</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: the call to action again, at the bottom of the page -->
+<section class="mx-auto max-w-5xl px-4 pb-16 sm:px-6">
+  <div class="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-lg">
+    <h2 class="text-2xl font-semibold tracking-tight">Want to see it for your business?</h2>
+    <p class="mx-auto mt-2 max-w-xl text-sm text-slate-600">
+      Tell us what your business does and which languages your callers speak. We will show you what is built so far.
+    </p>
+    <a href="/contact" class="mt-6 inline-block rounded-full bg-indigo-600 px-6 py-3 text-sm font-medium text-white hover:bg-indigo-700">Book a demo</a>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+
+<!-- Section 1: the page heading -->
+<section class="mx-auto max-w-3xl px-4 pt-12 pb-8 text-center sm:px-6 sm:pt-16">
+  <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">About {{ app_name }}</h1>
+  <p class="mx-auto mt-4 max-w-2xl text-slate-600">
+    A phone receptionist for small businesses whose customers do not all speak the same language.
+  </p>
+</section>
+
+<!-- Section 2: three short cards of text.
+     PLACEHOLDER: this is draft copy written while building the site. Read it and
+     rewrite it in your own words. It must stay true: no customers, numbers or
+     reviews that do not exist. -->
+<section class="mx-auto max-w-3xl space-y-4 px-4 pb-14 sm:px-6">
+  <div class="rounded-2xl border border-slate-200 bg-white p-6">
+    <h2 class="text-lg font-semibold">Why it exists</h2>
+    <p class="mt-2 text-sm leading-6 text-slate-600">
+      In a small business, the person who answers the phone is usually busy with something else:
+      a patient, a customer at the counter, a job on site. Calls that come in then, or after
+      closing time, go to voicemail. And some callers would rather speak Hindi, Telugu, Tamil or
+      Spanish than English.
+    </p>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-white p-6">
+    <h2 class="text-lg font-semibold">What we are building</h2>
+    <p class="mt-2 text-sm leading-6 text-slate-600">
+      An AI receptionist that picks up every call, talks with the caller in English, Hinglish,
+      Hindi, Telugu, Tamil or Spanish, books the appointment, and sends a text message to confirm
+      it. The business owner sees every call, with a summary and a transcript, in a dashboard.
+    </p>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-white p-6">
+    <h2 class="text-lg font-semibold">Where we are</h2>
+    <p class="mt-2 text-sm leading-6 text-slate-600">
+      {{ app_name }} is at an early stage. The owner dashboard works with sample calls. Answering
+      real phone calls, booking into a real calendar and sending text messages are not built yet.
+      The <a href="/how-it-works" class="text-indigo-600 hover:underline">How it works</a> page
+      marks each step as built or planned.
+    </p>
+  </div>
+
+  <!-- PLACEHOLDER: there is no "who is behind it" card on purpose. If you want one,
+       copy a card from above and write about yourself. Do not add people who are not real. -->
+</section>
+
+<!-- Section 3: the call to action -->
+<section class="mx-auto max-w-5xl px-4 pb-16 sm:px-6">
+  <div class="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-lg">
+    <h2 class="text-2xl font-semibold tracking-tight">Talk to us</h2>
+    <p class="mx-auto mt-2 max-w-xl text-sm text-slate-600">
+      If this sounds useful for your business, tell us about it. It helps decide what gets built first.
+    </p>
+    <a href="/contact" class="mt-6 inline-block rounded-full bg-indigo-600 px-6 py-3 text-sm font-medium text-white hover:bg-indigo-700">Book a demo</a>
+  </div>
+</section>
+
+{% endblock %}
