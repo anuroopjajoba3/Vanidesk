@@ -1,5 +1,9 @@
 """The web app: the public website pages, a health check and the owner dashboard."""
 
+import os
+import sys
+from pathlib import Path
+
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -15,9 +19,10 @@ app = FastAPI(title=settings.app_name)
 
 # The two folders that hold the HTML files. "website" has the public pages
 # (home, pricing and so on) and "dashboard" has index.html, the owner dashboard.
-# They are looked up from the folder you start uvicorn in, so always start
-# uvicorn from the top folder of the project.
-templates = Jinja2Templates(directory=["website", "dashboard"])
+# A full path is used so the pages still load when the app is not started
+# from the project folder, which is how Vercel starts it.
+ROOT = Path(__file__).resolve().parent.parent
+templates = Jinja2Templates(directory=[str(ROOT / "website"), str(ROOT / "dashboard")])
 
 # Let every HTML file write {{ app_name }}. The name itself is written in one
 # place only: app/config.py.
@@ -25,6 +30,15 @@ templates.env.globals["app_name"] = settings.app_name
 
 # Make sure the tables exist, so the pages work even before seed.py has run.
 create_tables()
+
+# Vercel starts with an empty database. Fill it with the sample calls so the
+# dashboard is not blank. seed() does nothing when calls are already there.
+if os.environ.get("VERCEL"):
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from seed import seed
+
+    seed()
 
 
 def format_duration(seconds):
