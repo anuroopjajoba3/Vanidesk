@@ -1,11 +1,11 @@
-# VaniDesk
+# PolyRing
 
-VaniDesk is an AI phone receptionist for US small businesses. This project has two parts:
+PolyRing is an AI phone receptionist for US small businesses. This project has two parts:
 
 - **The public website:** Home, How it works, Pricing, About, Contact / Book a demo, Log in and Sign up.
 - **The owner dashboard:** one page where the business owner sees the phone calls that were answered: what happened on each call, the appointments that came out of it, and the transcript.
 
-Both are plain HTML with Tailwind classes, served by FastAPI through Jinja2 templates, with data in a SQLite database. The dashboard is built the way the dashboard build guide (`vanidesk-dashboard-ui-guide.md`) teaches it.
+Both are plain HTML with Tailwind classes, served by FastAPI through Jinja2 templates, with data in a SQLite database. The dashboard is built the way the dashboard build guide teaches it.
 
 Three things to know before you start:
 
@@ -97,7 +97,7 @@ The dashboard does not use `base.html`. It keeps its own layout with the sidebar
 When a visitor sends the form on `/contact`, the app checks it (a name and an email address that looks right) and saves it as one row in the `demo_requests` table of the database. No email is sent, and no page shows the requests yet. To read them, run this in the project folder:
 
 ```bash
-sqlite3 -header -column vanidesk.db "SELECT * FROM demo_requests;"
+sqlite3 -header -column receptionist.db "SELECT * FROM demo_requests;"
 ```
 
 `sqlite3` comes with macOS. On Ubuntu or Debian, install it with `sudo apt install sqlite3`.
@@ -107,16 +107,17 @@ sqlite3 -header -column vanidesk.db "SELECT * FROM demo_requests;"
 The name is written in exactly one place in the code: `app_name` in `app/config.py`.
 
 ```python
-app_name: str = "VaniDesk"
+app_name: str = "PolyRing"
 ```
 
-Change that line, save, and every page, every browser tab title and the dashboard show the new name. In the HTML files the name is always written as `{{ app_name }}`, never typed out.
+Changing the name is that one setting. Change the line, save, and every page, every browser tab title, the header, the footer and the dashboard show the new name. In the HTML files the name is always written as `{{ app_name }}`, never typed out.
 
-Three things are not renamed by that line, because they are not shown on any page:
+Two things are not renamed by that line:
 
-- This README. Change the name here by hand.
-- The database file `vanidesk.db` (set by `DATABASE_URL`).
-- The folder and the GitHub repository.
+- This README. Change the name here by hand (it is in the heading and the first sentence).
+- The folder and the GitHub repository. They are still called `Vanidesk`, the first working name, which is why the run steps say `cd path/to/Vanidesk`. Nothing on a page shows that name.
+
+The database file is called `receptionist.db` and the speaker in the sample transcripts is called `Receptionist`, so neither has to change when the product name does.
 
 ## Placeholder text you must replace
 
@@ -131,7 +132,7 @@ grep -rn "PLACEHOLDER" website/
 | `website/pricing.html` | The three plans: the names `Plan A`, `Plan B`, `Plan C`, the price `$—`, and every line in each plan. The page shows an orange "Prices are not decided yet" notice and a `Placeholder` label on each plan. | Decide the real plans, change the `plans` list, then delete the notice and the labels. |
 | `website/about.html` | The three paragraphs (Why it exists, What we are building, Where we are) are draft wording. | Rewrite them in your own words. There is no "who is behind it" part. Add one if you want. |
 | `website/contact.html` | Two promises: "We will get in touch" and "We use your details only to reply to this request". | Keep them only if they are true. |
-| `app/config.py` | The name `VaniDesk`. | See [Rename the product](#rename-the-product). |
+| `app/config.py` | The name `PolyRing`. It was picked "for now" and may change again. | See [Rename the product](#rename-the-product). |
 
 The rest of the wording (the home page, the How it works page) is a first draft too, so read all of it. One rule for anything you write: keep it true. The site has no customer names, reviews, logos or numbers, because there are none yet. And when a part of the product gets built, update the two lists under "Where the product is today" in `website/home.html` and the labels in `website/how-it-works.html`.
 
@@ -179,7 +180,7 @@ Vanidesk/
 └── .gitignore           Files Git should ignore
 ```
 
-Running the app creates three more things, and Git ignores all of them: `.venv/` (the virtual environment), `.env` (your settings) and `vanidesk.db` (the database).
+Running the app creates three more things, and Git ignores all of them: `.venv/` (the virtual environment), `.env` (your settings) and `receptionist.db` (the database).
 
 ## Change the business or the sample calls
 
@@ -189,11 +190,11 @@ Everything made up is in one file: `app/sample_data.py`.
 - `SAMPLE_CALLS` holds the 12 calls. These are copied into the database by `seed.py`, so after you change them, rebuild the database:
 
 ```bash
-rm vanidesk.db
+rm receptionist.db
 python seed.py
 ```
 
-Deleting `vanidesk.db` also deletes the demo requests that were sent with the contact form, because they are in the same file.
+Deleting `receptionist.db` also deletes the demo requests that were sent with the contact form, because they are in the same file.
 
 Running `python seed.py` on a database that already has calls changes nothing, so you cannot wipe your data by accident.
 
@@ -225,9 +226,9 @@ The guide builds the smallest page that works. A few things here go one step fur
 - **One extra column: `sms_sent`.** `CallLog` has a true/false column that says whether a text went out. The green badge and the small grey note under the table read it, instead of always saying "SMS sent".
 - **The summary line is worked out in Python.** `make_summary_line` in `app/main.py` counts the appointments by status. A call with no appointments shows no table.
 - **More sample data, in its own file.** The guide suggests two or three calls typed into `seed.py`. Here there are 12, kept in `app/sample_data.py`, and `seed.py` copies them into the database.
-- **Settings shows the business details**, not "Coming in Milestone 6". The sidebar also shows the business name under "VaniDesk".
+- **Settings shows the business details**, not "Coming in Milestone 6". The sidebar also shows the business name under the product name.
 - **Small extras.** The Appointments table has an `Open the call` link, the Transcripts view has a list to pick another call, and a link above the card goes back to the website.
-- **The name is not typed into the page.** The guide writes `VaniDesk` in the `<title>` and the sidebar. Here both say `{{ app_name }}`, which `app/main.py` fills in from `app/config.py`. In the sample transcripts the speaker is called `Receptionist`, not the product name, for the same reason.
+- **The name is not typed into the page.** The guide types the product name into the `<title>` and the sidebar. Here both say `{{ app_name }}`, which `app/main.py` fills in from `app/config.py`. In the sample transcripts the speaker is called `Receptionist`, not the product name, for the same reason.
 
 ## What is not built yet
 
@@ -245,7 +246,7 @@ The guide builds the smallest page that works. A few things here go one step fur
 - **`uvicorn: command not found`:** the virtual environment is not switched on. Run `source .venv/bin/activate`.
 - **`TemplateNotFound`** or **`No module named 'app'`:** you started `uvicorn` from the wrong folder. Start it from the folder that contains `app`, `website` and `dashboard`.
 - **`Form data requires "python-multipart" to be installed`:** your virtual environment was made before the website was added. Run `pip install -r requirements.txt`, then start the app again.
-- **The transcripts in the dashboard still say `VaniDesk:` in front of each line:** your database was filled by an older version. Run `rm vanidesk.db`, then `python seed.py`.
+- **The dashboard still shows an older product name in front of the transcript lines, or says `No calls yet` after you downloaded newer code:** your `.env` and your database were made by an older version, when the database file had another name. Run `cp .env.example .env`, then `python seed.py`. That makes a fresh database called `receptionist.db`. The older `.db` file in the folder is not used any more and can be deleted.
 - **The page shows plain black text with no colours:** Tailwind is downloaded from the internet each time the page loads. Check your connection and refresh.
 - **The page says `No calls yet`:** run `python seed.py` (step 6).
 - **`Address already in use`:** something else is using port 8000. Start the app on another port with `uvicorn app.main:app --reload --port 8001` and open `http://localhost:8001/dashboard`.

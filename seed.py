@@ -4,11 +4,12 @@ Run it once from the top folder:
 
     python seed.py
 
-To start again from scratch, delete the file vanidesk.db and run it again.
+To start again from scratch, delete the database file (receptionist.db) and run it again.
 """
 
 from sqlalchemy import func, select
 
+from app.config import settings
 from app.db.database import SessionLocal, create_tables
 from app.db.models import Appointment, CallLog
 from app.sample_data import SAMPLE_CALLS
@@ -21,7 +22,10 @@ def seed():
     calls_in_database = db.execute(select(func.count(CallLog.id))).scalar()
     if calls_in_database > 0:
         print(f"The database already has {calls_in_database} calls. Nothing was added.")
-        print("To start again, delete the file vanidesk.db and run this script again.")
+        # Take the file name out of the setting: "sqlite:///./receptionist.db"
+        # becomes "./receptionist.db". That way the message names the real file.
+        database_file = settings.database_url.replace("sqlite:///", "")
+        print(f"To start again, delete the file {database_file} and run this script again.")
         db.close()
         return
 
