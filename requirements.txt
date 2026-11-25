@@ -3,3 +3,5 @@ uvicorn==0.54.0
 SQLAlchemy==2.1.9
 Jinja2==3.1.6
 pydantic-settings==2.16.3
+# Reads the forms that pages send, such as the contact form
+python-multipart==0.0.34

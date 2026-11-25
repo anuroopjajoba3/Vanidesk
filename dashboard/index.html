@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VaniDesk dashboard</title>
+    <!-- app_name comes from app/config.py, the one place the name is written -->
+    <title>{{ app_name }} dashboard</title>
+    <!-- The small icon on the browser tab: a blue square, drawn right here so no image file is needed -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23615fff'/%3E%3C/svg%3E" />
     <!-- Stage 1: Tailwind, downloaded from the internet each time the page loads -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
@@ -11,15 +14,20 @@
   <!-- Stage 1: the blue background -->
   <body class="min-h-screen bg-linear-to-b from-blue-50 via-blue-200 to-blue-50 p-6 text-slate-800">
 
+    <!-- A link back to the public website, above the card -->
+    <p class="mx-auto max-w-5xl text-sm">
+      <a href="/" class="text-slate-600 hover:text-slate-900">← Back to the {{ app_name }} website</a>
+    </p>
+
     <!-- Stage 2: the white card with two columns -->
-    <div class="mx-auto mt-10 flex min-h-[32rem] max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+    <div class="mx-auto mt-6 flex min-h-[32rem] max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
 
       <!-- Stage 3: the sidebar -->
       <aside class="w-60 shrink-0 border-r border-slate-200 bg-slate-50 p-3">
         <div class="flex items-center gap-2 px-3 py-2">
           <span class="size-7 shrink-0 rounded-lg bg-indigo-500"></span>
           <span>
-            <span class="block text-sm font-semibold">VaniDesk</span>
+            <span class="block text-sm font-semibold">{{ app_name }}</span>
             <span class="block text-xs text-slate-500">{{ business.name }}</span>
           </span>
         </div>
@@ -83,7 +91,7 @@
 
           <div class="flex-1 px-8 py-6">
 
-            <!-- Stage 4: the checklist of what VaniDesk did on the call -->
+            <!-- Stage 4: the checklist of what the receptionist did on the call -->
             <ul class="space-y-3 text-sm">
               {% for step in steps %}
               <li class="flex items-center gap-3">

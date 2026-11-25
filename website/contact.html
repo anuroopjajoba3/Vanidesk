@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Contact and book a demo{% endblock %}
+
+{% block content %}
+
+<!-- Two columns on a wide screen (text left, form right), one column on a phone -->
+<section class="mx-auto grid max-w-5xl gap-8 px-4 pt-12 pb-16 sm:px-6 sm:pt-16 md:grid-cols-2">
+
+  <!-- Column 1: what this page is for -->
+  <div>
+    <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Book a demo</h1>
+    <!-- PLACEHOLDER: this text promises a reply. Keep it only if you will read the requests and write back. -->
+    <p class="mt-4 text-slate-600">
+      Tell us a little about your business. We will get in touch and show you what is built so far.
+    </p>
+
+    <ul class="mt-6 space-y-3 text-sm text-slate-600">
+      <li class="flex items-start gap-3">
+        <svg class="size-5 shrink-0 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <span>{{ app_name }} is still being built and does not answer real phone calls yet. The demo shows the owner dashboard with sample calls.</span>
+      </li>
+      <li class="flex items-start gap-3">
+        <svg class="size-5 shrink-0 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <span>Your message is saved when you press the button. You will not get an automatic email.</span>
+      </li>
+      <li class="flex items-start gap-3">
+        <svg class="size-5 shrink-0 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <!-- PLACEHOLDER: a promise about how the details are used. Keep it only if it is true. -->
+        <span>We use your details only to reply to this request.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Column 2: the form, or the thank-you message after it was sent -->
+  <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
+
+    {% if sent %}
+    <!-- Shown at /contact?sent=1, which is where the app sends the browser after saving -->
+    <div class="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800" role="status">
+      <p class="font-medium">Thank you. Your request is saved.</p>
+      <p class="mt-1">We will read it and get back to you.</p>
+    </div>
+    <a href="/contact" class="mt-4 inline-block text-sm text-indigo-600 hover:underline">Send another request</a>
+
+    {% else %}
+
+    <!-- The messages from app/main.py when something in the form was not right -->
+    {% if errors %}
+    <div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+      <p class="font-medium">Please fix this and send the form again:</p>
+      <ul class="mt-1 list-disc pl-5">
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <!-- method="post" sends the form to the contact_submit route in app/main.py.
+         The name="" of each box is the name that route reads it by.
+         value="..." puts back what was typed when the form is shown again with an error. -->
+    <form method="post" action="/contact" class="space-y-4">
+      <div>
+        <label for="name" class="block text-sm font-medium">Your name</label>
+        <input id="name" name="name" type="text" required maxlength="100" autocomplete="name" value="{{ form.name }}"
+               class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium">Email</label>
+        <input id="email" name="email" type="email" required maxlength="200" autocomplete="email" value="{{ form.email }}"
+               class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
+      </div>
+
+      <div>
+        <label for="business_name" class="block text-sm font-medium">Business name <span class="font-normal text-slate-400">(optional)</span></label>
+        <input id="business_name" name="business_name" type="text" maxlength="150" autocomplete="organization" value="{{ form.business_name }}"
+               class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
+      </div>
+
+      <div>
+        <label for="phone" class="block text-sm font-medium">Phone <span class="font-normal text-slate-400">(optional)</span></label>
+        <input id="phone" name="phone" type="tel" maxlength="30" autocomplete="tel" value="{{ form.phone }}"
+               class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
+      </div>
+
+      <div>
+        <label for="message" class="block text-sm font-medium">What would you like to know? <span class="font-normal text-slate-400">(optional)</span></label>
+        <textarea id="message" name="message" rows="4" maxlength="2000"
+                  class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none">{{ form.message }}</textarea>
+      </div>
+
+      <button type="submit" class="w-full cursor-pointer rounded-full bg-indigo-600 px-6 py-3 text-sm font-medium text-white hover:bg-indigo-700">Send request</button>
+    </form>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

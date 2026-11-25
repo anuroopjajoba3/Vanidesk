@@ -1,22 +1,29 @@
-"""The VaniDesk web app: a health check and the owner dashboard."""
+"""The web app: the public website pages, a health check and the owner dashboard."""
 
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.db.database import create_tables, get_db
-from app.db.models import Appointment, CallLog
+from app.db.models import Appointment, CallLog, DemoRequest
 from app.sample_data import BUSINESS
 
-app = FastAPI(title="VaniDesk")
+app = FastAPI(title=settings.app_name)
 
-# The folder that holds index.html. It is looked up from the folder you start
-# uvicorn in, so always start uvicorn from the top folder of the project.
-templates = Jinja2Templates(directory="dashboard")
+# The two folders that hold the HTML files. "website" has the public pages
+# (home, pricing and so on) and "dashboard" has index.html, the owner dashboard.
+# They are looked up from the folder you start uvicorn in, so always start
+# uvicorn from the top folder of the project.
+templates = Jinja2Templates(directory=["website", "dashboard"])
 
-# Make sure the tables exist, so the page works even before seed.py has run.
+# Let every HTML file write {{ app_name }}. The name itself is written in one
+# place only: app/config.py.
+templates.env.globals["app_name"] = settings.app_name
+
+# Make sure the tables exist, so the pages work even before seed.py has run.
 create_tables()
 
 
@@ -54,15 +61,142 @@ def make_summary_line(appointments):
     return "Done. " + ", ".join(parts) + ":"
 
 
+def looks_like_email(text):
+    """A simple check: no spaces, one @ with something before it, and a dot after it.
+
+    "priya@example.com" passes. "priya", "priya@" and "priya@example" do not.
+    """
+    if " " in text or text.count("@") != 1:
+        return False
+    before_at, after_at = text.split("@")
+    if before_at == "":
+        return False
+    return "." in after_at.strip(".")
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
 
-@app.get("/")
-def home():
-    """Send anyone who opens the bare address to the dashboard."""
-    return RedirectResponse(url="/dashboard")
+# ============ The public website ============
+# Each route below shows one HTML file from the "website" folder.
+# Every one of those files extends website/base.html, the shared layout.
+
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse(request=request, name="home.html")
+
+
+@app.get("/how-it-works", response_class=HTMLResponse)
+def how_it_works(request: Request):
+    return templates.TemplateResponse(request=request, name="how-it-works.html")
+
+
+@app.get("/pricing", response_class=HTMLResponse)
+def pricing(request: Request):
+    return templates.TemplateResponse(request=request, name="pricing.html")
+
+
+@app.get("/about", response_class=HTMLResponse)
+def about(request: Request):
+    return templates.TemplateResponse(request=request, name="about.html")
+
+
+@app.get("/login", response_class=HTMLResponse)
+def login(request: Request):
+    """The login screen. It is only a screen for now: the form does not log anyone in."""
+    return templates.TemplateResponse(request=request, name="login.html")
+
+
+@app.get("/signup", response_class=HTMLResponse)
+def signup(request: Request):
+    """The sign-up screen. It is only a screen for now: the form does not create accounts."""
+    return templates.TemplateResponse(request=request, name="signup.html")
+
+
+@app.get("/contact", response_class=HTMLResponse)
+def contact(request: Request):
+    """Show the empty Contact / Book a demo form."""
+    # After a request is saved, the browser is sent to /contact?sent=1,
+    # and the page shows a thank-you message instead of the form.
+    sent = request.query_params.get("sent") == "1"
+
+    return templates.TemplateResponse(
+        request=request,
+        name="contact.html",
+        context={"sent": sent, "errors": [], "form": {}},
+    )
+
+
+@app.post("/contact", response_class=HTMLResponse)
+def contact_submit(
+    request: Request,
+    # Form("") reads a box of the form by its name. A box that was left out is "".
+    name: str = Form(""),
+    email: str = Form(""),
+    business_name: str = Form(""),
+    phone: str = Form(""),
+    message: str = Form(""),
+    db: Session = Depends(get_db),
+):
+    """Check what was typed into the form, and save it as one DemoRequest row."""
+    # strip() removes spaces at the start and the end.
+    form = {
+        "name": name.strip(),
+        "email": email.strip(),
+        "business_name": business_name.strip(),
+        "phone": phone.strip(),
+        "message": message.strip(),
+    }
+
+    errors = []
+    if form["name"] == "":
+        errors.append("Please enter your name.")
+    if form["email"] == "":
+        errors.append("Please enter your email address.")
+    elif not looks_like_email(form["email"]):
+        errors.append("That email address does not look right. It should look like name@example.com.")
+
+    # The boxes in the HTML have the same limits (maxlength). This second check
+    # is here because a request can also be sent without using the page.
+    if len(form["name"]) > 100:
+        errors.append("Please keep your name under 100 characters.")
+    if len(form["email"]) > 200:
+        errors.append("Please keep your email address under 200 characters.")
+    if len(form["business_name"]) > 150:
+        errors.append("Please keep the business name under 150 characters.")
+    if len(form["phone"]) > 30:
+        errors.append("Please keep the phone number under 30 characters.")
+    if len(form["message"]) > 2000:
+        errors.append("Please keep your message under 2000 characters.")
+
+    if errors:
+        # Show the form again with the messages, and keep what was typed.
+        return templates.TemplateResponse(
+            request=request,
+            name="contact.html",
+            context={"sent": False, "errors": errors, "form": form},
+            status_code=400,
+        )
+
+    demo_request = DemoRequest(
+        name=form["name"],
+        email=form["email"],
+        business_name=form["business_name"],
+        phone=form["phone"],
+        message=form["message"],
+    )
+    db.add(demo_request)
+    db.commit()
+
+    # Send the browser to a normal page instead of answering the POST directly.
+    # That way, refreshing the thank-you page cannot save the request twice.
+    return RedirectResponse(url="/contact?sent=1", status_code=303)
+
+
+# ============ The owner dashboard ============
 
 
 @app.get("/dashboard", response_class=HTMLResponse)

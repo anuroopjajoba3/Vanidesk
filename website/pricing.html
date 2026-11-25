@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Pricing{% endblock %}
+
+{% block content %}
+
+<!-- Section 1: the page heading -->
+<section class="mx-auto max-w-5xl px-4 pt-12 pb-6 text-center sm:px-6 sm:pt-16">
+  <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Pricing</h1>
+
+  <!-- PLACEHOLDER: delete this orange notice once the real prices are on the page -->
+  <p class="mx-auto mt-6 max-w-2xl rounded-2xl border border-orange-200 bg-orange-50 px-5 py-4 text-sm text-orange-800">
+    <span class="font-medium">Prices are not decided yet.</span>
+    The three plans below are placeholders that show how this page will look. They are not offers.
+  </p>
+</section>
+
+<!-- Section 2: the three plan cards.
+     PLACEHOLDER: every name, price and line in this list is made up. Replace all of it
+     when the real plans are decided. Each plan is (name, price, who it is for, list of lines). -->
+<section class="mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+  {% set plans = [
+    ("Plan A", "$—", "Who this plan is for: to be decided", [
+      "Calls included each month: to be decided",
+      "Languages: to be decided",
+      "Appointment booking: to be decided",
+    ]),
+    ("Plan B", "$—", "Who this plan is for: to be decided", [
+      "Calls included each month: to be decided",
+      "Languages: to be decided",
+      "SMS confirmations: to be decided",
+    ]),
+    ("Plan C", "$—", "Who this plan is for: to be decided", [
+      "Calls included each month: to be decided",
+      "Number of phone lines: to be decided",
+      "Support: to be decided",
+    ]),
+  ] %}
+
+  <!-- One column on a phone, three from medium width up -->
+  <div class="grid gap-4 md:grid-cols-3">
+    {% for name, price, who_for, lines in plans %}
+    <div class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-lg font-semibold">{{ name }}</h2>
+        <span class="rounded-md border border-orange-200 bg-orange-50 px-2 py-1 font-mono text-xs text-orange-700">Placeholder</span>
+      </div>
+
+      <p class="mt-4">
+        <span class="text-4xl font-semibold tracking-tight">{{ price }}</span>
+        <span class="text-sm text-slate-500">/ month</span>
+      </p>
+      <p class="mt-2 text-sm text-slate-600">{{ who_for }}</p>
+
+      <!-- flex-1 lets the list grow, so the buttons of the three cards line up at the bottom -->
+      <ul class="mt-5 flex-1 space-y-3 text-sm">
+        {% for line in lines %}
+        <li class="flex items-start gap-3">
+          <svg class="size-5 shrink-0 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <span class="text-slate-600">{{ line }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <a href="/contact" class="mt-6 block rounded-full border border-slate-200 px-4 py-2 text-center text-sm font-medium text-slate-700 hover:bg-slate-50">Ask about this plan</a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Section 3: two honest questions and answers -->
+<section class="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+  <h2 class="text-center text-2xl font-semibold tracking-tight">Questions</h2>
+
+  <div class="mt-6 space-y-4">
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 class="font-medium">Can I buy {{ app_name }} today?</h3>
+      <p class="mt-1 text-sm text-slate-600">
+        No. The product is still being built and does not answer real phone calls yet, so there is nothing to pay for.
+      </p>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <h3 class="font-medium">How do I hear about the prices when they are set?</h3>
+      <p class="mt-1 text-sm text-slate-600">
+        Send a message on the <a href="/contact" class="text-indigo-600 hover:underline">contact page</a> and say that you would like to know.
+      </p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
