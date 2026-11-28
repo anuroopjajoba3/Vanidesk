@@ -1,6 +1,6 @@
-# PolyRing
+# Hello
 
-PolyRing is an AI phone receptionist for US small businesses. This project has two parts:
+Hello is an AI phone receptionist for US small businesses. This project has two parts:
 
 - **The public website:** Home, How it works, Pricing, About, Contact / Book a demo, Log in and Sign up.
 - **The owner dashboard:** one page where the business owner sees the phone calls that were answered: what happened on each call, the appointments that came out of it, and the transcript.
@@ -107,7 +107,7 @@ sqlite3 -header -column receptionist.db "SELECT * FROM demo_requests;"
 The name is written in exactly one place in the code: `app_name` in `app/config.py`.
 
 ```python
-app_name: str = "PolyRing"
+app_name: str = "Hello"
 ```
 
 Changing the name is that one setting. Change the line, save, and every page, every browser tab title, the header, the footer and the dashboard show the new name. In the HTML files the name is always written as `{{ app_name }}`, never typed out.
@@ -132,7 +132,7 @@ grep -rn "PLACEHOLDER" website/
 | `website/pricing.html` | The three plans: the names `Plan A`, `Plan B`, `Plan C`, the price `$—`, and every line in each plan. The page shows an orange "Prices are not decided yet" notice and a `Placeholder` label on each plan. | Decide the real plans, change the `plans` list, then delete the notice and the labels. |
 | `website/about.html` | The three paragraphs (Why it exists, What we are building, Where we are) are draft wording. | Rewrite them in your own words. There is no "who is behind it" part. Add one if you want. |
 | `website/contact.html` | Two promises: "We will get in touch" and "We use your details only to reply to this request". | Keep them only if they are true. |
-| `app/config.py` | The name `PolyRing`. It was picked "for now" and may change again. | See [Rename the product](#rename-the-product). |
+| `app/config.py` | The name `Hello`. It was picked "for now" and may change again. | See [Rename the product](#rename-the-product). |
 
 The rest of the wording (the home page, the How it works page) is a first draft too, so read all of it. One rule for anything you write: keep it true. The site has no customer names, reviews, logos or numbers, because there are none yet. And when a part of the product gets built, update the two lists under "Where the product is today" in `website/home.html` and the labels in `website/how-it-works.html`.
 
